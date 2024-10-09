@@ -4,9 +4,9 @@ import { Link } from "expo-router";
 export default function Index() {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Home screen</Text>
-      <Link href="/about" style={styles.link}>
-        Go to About screen
+      <Text style={styles.text}>About screen</Text>
+      <Link href="/" style={styles.link}>
+        Go to Home screen
       </Link>
     </View>
   );
