@@ -1,19 +1,36 @@
-import { Text, View, StyleSheet } from "react-native";
-import Button from "@/components/Button";
-import ImageViewer from "@/components/ImageViewer";
-
+import { useState } from 'react';
+import { Text, View, StyleSheet } from 'react-native';
+import Button from '@/components/Button';
+import ImageViewer from '@/components/ImageViewer';
+import * as ImagePicker from 'expo-image-picker';
 
 const PlaceholderImage = require('../../assets/images/images/background-image.png');
 
 export default function Index() {
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
+  const pickImageAsync = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setSelectedImage(result.assets[0].uri);
+    } else {
+      alert('You did not select any image.');
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.imageContainer}>
-        <ImageViewer imgSource={PlaceholderImage} />
+        <ImageViewer imgSource={selectedImage ? { uri: selectedImage } : PlaceholderImage} />
       </View>
       <View style={styles.footerContainer}>
-        <Button theme="primary" label=" Choose a Photo" />
-        <Button label="Use This Photo" />
+        <Button theme="primary" label="Choose a photo" onPress={pickImageAsync} />
+        <Button label="Use this photo" />
       </View>
     </View>
   );
@@ -22,22 +39,11 @@ export default function Index() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#25292e",
-  },
-  text: {
-    color: "#fff",
-  },
-  link: {
-    fontSize: 18,
-    textDecorationLine: "underline",
-    color: "#1e90ff",
-    marginTop: 10,
+    backgroundColor: '#25292e',
+    alignItems: 'center',
   },
   imageContainer: {
     flex: 1,
-    paddingTop: 28
   },
   footerContainer: {
     flex: 1 / 3,
