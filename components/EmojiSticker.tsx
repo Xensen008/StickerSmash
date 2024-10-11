@@ -15,8 +15,10 @@ export default function EmojiSticker({ imageSize, stickerSource }: Props) {
   const doubleTap = Gesture.Tap()
     .numberOfTaps(2)
     .onStart(() => {
-      if (scaleImage.value !== imageSize * 2) {
-        scaleImage.value = scaleImage.value * 2;
+      if (scaleImage.value === imageSize) {
+        scaleImage.value = imageSize * 2;
+      } else {
+        scaleImage.value = imageSize;
       }
     });
 
@@ -50,7 +52,7 @@ export default function EmojiSticker({ imageSize, stickerSource }: Props) {
       <Animated.View style={[containerStyle, { top: -350 }]}>
         <GestureDetector gesture={doubleTap}>
           <Animated.Image
-            source={stickerSource}
+            source={{ uri: stickerSource }}
             resizeMode="contain"
             style={[imageStyle, { width: imageSize, height: imageSize }]}
           />
