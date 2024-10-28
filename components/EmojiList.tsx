@@ -1,32 +1,34 @@
 import { useState } from 'react';
 import { StyleSheet, FlatList, Platform, Pressable } from 'react-native';
 import { Image } from 'expo-image';
+import { Asset } from 'expo-asset';
 
 type Props = {
   onSelect: (image: string) => void;
   onCloseModal: () => void;
 };
 
-export default function EmojiList({ onSelect, onCloseModal }: Props) {
-  const [emoji] = useState([
-    require('../assets/images/images/emoji1.png'),
-    require('../assets/images/images/emoji2.png'),
-    require('../assets/images/images/emoji3.png'),
-    require('../assets/images/images/emoji4.png'),
-    require('../assets/images/images/emoji5.png'),
-    require('../assets/images/images/emoji6.png'),
-  ]);
+// Import images statically
+const emojiImages = [
+  require('../assets/images/images/emoji1.png'),
+  require('../assets/images/images/emoji2.png'),
+  require('../assets/images/images/emoji3.png'),
+  require('../assets/images/images/emoji4.png'),
+  require('../assets/images/images/emoji5.png'),
+  require('../assets/images/images/emoji6.png'),
+];
 
+export default function EmojiList({ onSelect, onCloseModal }: Props) {
   return (
     <FlatList
       horizontal
       showsHorizontalScrollIndicator={Platform.OS === 'web'}
-      data={emoji}
+      data={emojiImages}
       contentContainerStyle={styles.listContainer}
       renderItem={({ item, index }) => (
         <Pressable
           onPress={() => {
-            onSelect(item);
+            onSelect(Asset.fromModule(item).uri); // Ensure item is a string URI
             onCloseModal();
           }}>
           <Image source={item} key={index} style={styles.image} />
